@@ -1,53 +1,71 @@
-﻿
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 5//EN"
+﻿<em> <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 5//EN"
                       "http://www.w3.org/TR/html5/strict.dtd">
-<html>
+	<html>
 
 <head>
 <meta charset="utf-8">
 <title>Notification Example</title>
 
+
+
 <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+
+
 <script type="text/javascript" charset="utf-8">
+	// Wait for PhoneGap to load
+	//
+	function onLoad() {
+		document.addEventListener("deviceready", onDeviceReady, false);
+	}
 
-    // Wait for PhoneGap to load
-    //
-    function onLoad() {
-        document.addEventListener("deviceready", onDeviceReady, false);
-    }
+	// PhoneGap is ready
+	//
+	function onDeviceReady() {
+		// Empty
+	}
 
-    // PhoneGap is ready
-    //
-    function onDeviceReady() {
-        // Empty
-    }
+	// alert dialog dismissed
+	function alertDismissed() {
+		// do something
+	}
 
-    // alert dialog dismissed
-    function alertDismissed() {
-        // do something
-    }
+	// Show a custom alert
+	//
+	
+	function showAlert() {
 
-    // Show a custom alert
-    //
-    function showAlert() {
-        navigator.notification.alert(
-            'You are the winner!',  // message
-            alertDismissed,         // callback
-            'Game Over',            // title
-            'Done'                  // buttonName
-        );
-    }
+		
+		appId = 217027698311123 // this is your facebook app id
+		window.plugins.facebook.authorize(appId, function(res) {
+			alert(res.name); // the authorized users name
 
-    </script>
+			window.plugins.facebook.request("me/likes", function(res) {
+				alert(res.data[0].name); // the name of the first 'liked' item
+			});
+
+		});
+		
+		
+	}
+	
+</script>
+
+<script type="text/javascript" charset="utf-8" src="facebook.js">
+		
+		</script>
+
+
 </head>
 <body onload="onLoad()" bgcolor="#3B5997">
-<center>
-<em>
-		<img alt="" src="imgs/logo.png" height="299" width="481"></em> <br>
-<em>
-		<img alt="" height="164" src="imgs/facebook.jpg" width="445"></em>	
+	<center>
+		<em> <img alt="" src="imgs/logo.png" height="299" width="481">
+		</em> <br> <em> <img alt="" height="164" src="imgs/facebook.jpg"
+			width="445"> </em>
 		<form method="post" charset="utf-8">
-		<input name="iniciar" onclick="showAlert(); return false;" type="button" value="Iniciar Sessão" style="width: 268px; height: 78px; font-style: normal; font-size: x-large;"></form>
-		</center>
+			<input name="iniciar" onclick="showAlert(); return false;"
+				type="button" value="Iniciar Sessão"
+				style="font-style: normal; font-size: x-large;">
+		</form>
+	</center>
 </body>
-</html>
+	</html> </em>
