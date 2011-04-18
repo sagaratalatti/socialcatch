@@ -1,6 +1,10 @@
 package com.cmu.socialcatch;
 
+import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
+
+import com.facebook.socialcatch.*;
 import com.phonegap.*;
 
 public class Main extends DroidGap {
@@ -10,4 +14,6 @@ public class Main extends DroidGap {
     	super.onCreate(savedInstanceState);
         super.loadUrl("file:///android_asset/www/index.html");
     }
+    
+    
 }
