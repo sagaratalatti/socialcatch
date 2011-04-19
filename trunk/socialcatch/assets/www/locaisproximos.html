@@ -3,17 +3,111 @@
 
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
-<link rel="stylesheet" type="text/css" href="estilo/main.css" />
-
 <title>Locais próximos</title>
+<link rel="stylesheet" type="text/css"
+	href="lib/resources/css/sencha-touch.css" />
+<script type="text/javascript" src="lib/sencha-touch.js"></script>
+
+
 </head>
 
 <body>
 
-<div id="actionbar" style="width: 100%"> 
-	<img alt=""  src="imgsh/search.png" class="actionbarimg" height="70px" style="float: right" width="70px"  /> 
+	<script type="text/javascript">
+		function clickListItem(id) {
 
-<div id="actionbartext">Places Próximos </div></div>
+			if (id == "sandro") {
+				alert(id + "aaaaa");
+			} else {
+				alert(id);
+			}
+
+		}
+
+		Ext
+				.setup({
+
+					onReady : function() {
+						var panel;
+						placesproximos = new Ext.Component(
+								{
+									title : "Places Próximos",
+									scroll : 'vertical',
+									tpl : [
+											'<tpl for=".">',
+											'<h2 id={user} onClick="clickListItem(id)">{user}</h2>',
+											'</tpl>' ]
+								});
+
+						placespornome = {
+							title : "Procurar Place",
+							html : "nada...."
+						}
+
+						var buttonsSpecTop = [ {
+							ui : 'back',
+							text : 'Back'
+						}, {
+							xtype : 'spacer'
+						}, {
+							ui : 'forward',
+							text : 'Forward'
+						} ]
+
+						var buttonsSpecBottom = [ {
+							ui : 'normal',
+							text : 'Normal'
+						}, {
+							ui : 'round',
+							text : 'Round'
+						}, {
+							ui : 'action',
+							text : 'Action'
+						}, {
+							ui : 'confirm',
+							text : 'Confirm'
+						} ]
+
+						var tapHandler = function(btn, evt) {
+							alert("Button '" + btn.text + "' tapped.");
+						}
+
+						var dockedItems = [ {
+							xtype : 'toolbar',
+							ui : 'dark',
+							dock : 'bottom',
+							items : buttonsSpecBottom,
+							defaults : {
+								handler : tapHandler
+							}
+						} ]
+
+						panel = new Ext.TabPanel({
+							fullscreen : true,
+							animation : 'slide',
+							items : [ placesproximos, placespornome ],
+							dockedItems : dockedItems
+
+						});
+
+						var nome = {
+							user : "sandro"
+						};
+						var nomeM = {
+							user : "Machado"
+						};
+						var nomelist = [ nome, nome, nome, nome, nome, nome,
+								nome, nome, nome, nome, nome, nome, nome, nome,
+								nome, nome, nome, nome, nome, nomeM, nome,
+								nome, nome, nome, nome, nome, nome, nome, nome,
+								nome ];
+						placesproximos.update(nomelist);
+
+					}
+				});
+	</script>
+
+
 
 </body>
 
