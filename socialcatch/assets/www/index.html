@@ -1,15 +1,20 @@
-﻿<em> <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 5//EN"
+﻿
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 5//EN"
                       "http://www.w3.org/TR/html5/strict.dtd">
-	<html>
+<html>
 
 <head>
-<meta charset="utf-8">
+<meta name="viewport" content="width=320; user-scalable=no" />
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<link rel="stylesheet" type="text/css" href="estilo/inicio.css" />
 <title>Notification Example</title>
 
 
 
-<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 
+
+<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
+<script type="text/javascript" charset="utf-8" src="facebook.js"></script>
 
 <script type="text/javascript" charset="utf-8">
 	// Wait for PhoneGap to load
@@ -22,6 +27,12 @@
 	//
 	function onDeviceReady() {
 		// Empty
+		if (window.devicePixelRatio == 1.5) {
+			  alert("This is a high-density screen");
+			} else if (window.devicePixelRation == 0.75) {
+			  alert("This is a low-density screen");
+			}
+
 	}
 
 	// alert dialog dismissed
@@ -33,7 +44,7 @@
 	//
 	
 	function showAlert() {
-
+		
 		
 		appId = 217027698311123 // this is your facebook app id
 		window.plugins.facebook.authorize(appId, function(res) {
@@ -48,24 +59,36 @@
 		
 	}
 	
+	function newPage(){
+		window.open('locaisproximos.html');
+	}
+	
 </script>
 
-<script type="text/javascript" charset="utf-8" src="facebook.js">
-		
-		</script>
+
 
 
 </head>
-<body onload="onLoad()" bgcolor="#3B5997">
-	<center>
-		<em> <img alt="" src="imgs/logo.png" height="299" width="481">
-		</em> <br> <em> <img alt="" height="164" src="imgs/facebook.jpg"
-			width="445"> </em>
+<body onload="onLoad()">
+
+<img alt="" src="imgsh/logo.png" height="205" width="320">
+
+
+<img alt="" src="imgsh/facebook.jpg" height="135" width="320">
+		
 		<form method="post" charset="utf-8">
-			<input name="iniciar" onclick="showAlert(); return false;"
-				type="button" value="Iniciar Sessão"
-				style="font-style: normal; font-size: x-large;">
+			<center>
+
+			<input name="iniciar" onclick="newPage(); return false;"
+					type="button" value=" Iniciar Sessão "
+					style="font-style: normal; font-size: x-large;">
+
+			<!--	<input name="iniciar" onclick="showAlert(); return false;"
+					type="button" value="Iniciar Sessão"
+					style="font-style: normal; font-size: x-large;"> -->
+			</center>
+
 		</form>
-	</center>
+
 </body>
-	</html> </em>
+</html>
