@@ -1,0 +1,32 @@
+﻿body {	
+	 background-color: #3B5997;
+	 color:white;
+	 font-weight:bold;
+	 margin: 0;
+     padding: 0;	 
+}
+
+#actionbar{ 
+ 	 float:right;
+ 	 height:70px;
+ 	 width:320px;
+  	 background-color:green;
+ 	  
+ 	 	 
+  	  	}
+  	  	
+#actionbartext{ 
+ 	 margin:20px;
+ 	 font-weight:bold;
+ 	 font-size:30px;
+ 	 text-align:center; 
+ 	 	 
+  	  	}
+
+  	  	
+  	  	
+img.actionbarimg{
+	vertical-align: top;
+	
+
+}

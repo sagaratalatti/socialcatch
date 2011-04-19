@@ -1,0 +1,29 @@
+﻿body {	
+	 background-color: #3B5997;
+	 color:white;
+	 font-weight:bold;
+	 margin: 0;
+     padding: 0;	 
+}
+
+#logo{
+	background-image:url('../imgsh/facebook.jpg');
+	background-repeat:no-repeat;
+	height:320px;
+	
+	width:auto;
+
+}
+
+
+
+#facebook{
+	
+	position:absolute;
+	height:40%;
+	width:100%;
+	
+	background-image:url('../imgsh/facebook.png');
+	background-repeat:no-repeat;
+
+}
