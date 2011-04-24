@@ -4,9 +4,11 @@
 <head>
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>Locais próximos</title>
-<link rel="stylesheet" type="text/css"
-	href="lib/resources/css/sencha-touch.css" />
+
+<link rel="stylesheet" type="text/css"href="lib/resources/css/sencha-touch.css" />
+
 <script type="text/javascript" src="lib/sencha-touch.js"></script>
+<script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 
 
 </head>
@@ -45,15 +47,21 @@
               'message: ' + error.message + '\n');
     }
 
-    
+ // process the confirmation dialog result
+    function onConfirm(button) {
+        alert('Você selecionou:' + button);
+    }
+
     
 		function clickListItem(id) {
 
-			if (id == "sandro") {
-				alert(id + "aaaaa");
-			} else {
-				alert(id);
-			}
+			navigator.notification.confirm(
+			        'Deseja efetuar check-in?',  // message
+			        onConfirm,              // callback to invoke with index of button pressed
+			        'Check-in',            // title
+			        'Sim,Não'          // buttonLabels
+			    );
+
 
 		}
 
@@ -64,22 +72,83 @@
 						//Registar o callback para quando tiver a localização...
 						navigator.geolocation.getCurrentPosition(onSuccess, onError);
 						
-						
+					
 						var panel;
 						placesproximos = new Ext.Component(
 								{
 									title : "Places Próximos",
 									scroll : 'vertical',
 									tpl : [
-											'<tpl for=".">',
-											'<h2 id={id} onClick="clickListItem(id)">{id}</h2>',
+											'<tpl for="."  >',
+											'<div id={id} onClick="clickListItem(id)" style="margin-top:3px">',
+											'<img alt="" height="45" src="{tipo}" width="45" style="margin-right:10px; float:left  "  ><h2 style="font-weight: bold"> {nome}</h2><h3> {descricao}</h3>',
+											'<hr>',
+											'</div>',
 											'</tpl>' ]
-								});
 
-						placespornome = {
-							title : "Procurar Place",
-							html : "nada...."
-						}
+								});
+					
+						
+						var searchPanel = new Ext.Panel({
+				            padding: 10,
+				            layout: {
+				                type: 'hbox',
+				                align: 'stretch'
+				            },
+				            items: [{
+				                flex: 3,
+				                xtype: 'textfield',
+				                style: 'margin-right: 10px;',
+				                id: 'textquery'
+				            },{
+				                flex: 2,
+				                xtype: 'button',
+				                text: 'Procurar',
+				                handler: function() {
+				                	alert("Olá Mundo");
+				                	
+				                	Ext.util.JSONP.request({
+				            			url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+				            			callbackkey: 'callback',
+				            			callback: function(data){
+				            				var nomelist = data.places;
+				            				placesproximos.update(nomelist);
+				            				
+				            			}
+				            		});
+				                    //var query = Ext.getCmp("textquery").getValue();
+				                    //Ext.Ajax.request({
+				                        //url: 'index.php?act=search&q='+query,
+				                        //url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+				                        //success: function(e) {
+				                            //var obj = Ext.util.JSON.decode(e.responseText);
+				                           // var msg = obj.results;
+				                        //    var html = tpl.apply(msg);
+				                         //  alert(msg);
+				                       //    placesproximos.update(msg);
+				                     //   }
+				                   //});
+				                }
+				            }]
+				        });
+						
+						var resultPanel = new Ext.Panel({
+							
+				            layout: 'fit',
+				            style: 'padding-bottom: 10px;',
+				            html: 'ola mundo'
+				        });
+						
+						
+						var placespornome = new Ext.Panel({	
+							title : "Procurar places",
+				            items: [searchPanel, placesproximos],
+				            scroll: 'vertical',
+				            //style: 'background: #DDEEF6;',
+				            fullscreen : true
+				        });
+
+						
 
 						var buttonsSpecTop = [ {
 							ui : 'back',
