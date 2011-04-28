@@ -20,7 +20,8 @@
 
 					onReady : function() {
 					var tabBar, muraltop, muralbottom, mural, mapa,buttonsSpecTop, buttonsSpecBottom, 
-						tapHandler, dockedItems, panel, tabBar;
+						tapHandler, dockedItems, panel, tabBar, utilizadorescheckedin;
+					
 					var myLatlng = new google.maps.LatLng(-25.363882,131.044922);
 					
 					muraltop = new Ext.Component(
@@ -49,13 +50,26 @@
 
 					
 					mapa = new Ext.Map({
-						title: "Mapa",
+						title: "Localização",
 						mapOptions:{
 			        		center: myLatlng		
 			        	}				
 						
 					});
 						
+					
+					utilizadorescheckedin = new Ext.Component(
+							{
+								title : "Check-ins",
+								scroll : 'vertical',
+								html: 'check-ins recentes'
+
+							});
+					
+
+
+					
+					
 
 					buttonsSpecTop = [ {
 							ui : 'back',
@@ -98,10 +112,26 @@
 					panel = new Ext.TabPanel({
 							fullscreen : true,
 							animation : 'slide',
-							items : [ mural, mapa ],
+							items : [ mural,  utilizadorescheckedin, mapa ],
 							dockedItems : dockedItems
 
 						});
+					
+					
+					var marker = new google.maps.Marker({
+						title:"Hello World!",  
+						position: myLatlng,
+					    map: mapa.map
+					      
+					  });
+					  
+					var infowindow = new google.maps.InfoWindow();
+					
+					
+					 google.maps.event.addListener(marker, 'mousedown', function() {
+						 infowindow.setContent("teste");
+						 infowindow.open(mapa.map, marker);
+				        });
 					
 				/*		
 					tabBar = panel.getTabBar();
@@ -121,31 +151,12 @@
 					  
 					  
 					
-					 var marker = new google.maps.Marker({
-					      position: myLatlng,
-					      map: mapa.map,
-					      title:"Hello World!"
-					  });
-					  
-					var infowindow = new google.maps.InfoWindow({
-			            content: 'Ext JS'
-			        })
-					
-					 google.maps.event.addListener(marker, 'click', function() {
-				          infowindow.open(mapa.map, marker);
-				        });
-					  
-					
-					
-				
-
-
-					
-					}
+					} 
 		
 		
 				});
 			    
+		
 	</script>
 
 
