@@ -77,6 +77,7 @@ public class FacebookAuth extends Plugin {
 	public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		this.mFb.authorizeCallback(requestCode, resultCode, intent);
         this.getResponse("me");
+        
 	}
 	
 	public void getResponse(final String path){
@@ -151,6 +152,7 @@ public class FacebookAuth extends Plugin {
 	   
 			Log.d("PhoneGapLog",values.toString());
 			this.fba.getResponse("me");
+			
 		}
 		
 		public void onFacebookError(FacebookError e) {

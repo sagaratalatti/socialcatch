@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=320; user-scalable=no" />
 <meta http-equiv="Content-type" content="text/html; charset=utf-8">
 <link rel="stylesheet" type="text/css" href="estilo/inicio.css" />
-<title>Notification Example</title>
+<title>SocialCatch</title>
 
 
 
@@ -46,16 +46,20 @@
 	function showAlert() {
 		
 		
-		appId = 217027698311123 // this is your facebook app id
+		appId = 217027698311123; // this is your facebook app id
 		window.plugins.facebook.authorize(appId, function(res) {
-			alert(res.name); // the authorized users name
-
-			window.plugins.facebook.request("me/likes", function(res) {
-				alert(res.data[0].name); // the name of the first 'liked' item
-			});
+			alert(res.name); 
+			window.plugins.facebook.request("me/friends",function(res){
+			        alert(res.data[0].name); 
+			        window.plugins.facebook.request("me",function(res){
+				        alert(res.link);
+				        window.open('locaisproximos.html');
+				    });
+			    });
+			
+			
 
 		});
-		
 		
 	}
 	
@@ -71,24 +75,24 @@
 </head>
 <body onload="onLoad()">
 
-<img alt="" src="imgsh/logo.png" height="205" width="320">
+	<img alt="" src="imgsh/logo.png" height="205" width="320">
 
 
-<img alt="" src="imgsh/facebook.jpg" height="135" width="320">
-		
-		<form method="post" charset="utf-8">
-			<center>
+	<img alt="" src="imgsh/facebook.jpg" height="135" width="320">
 
-			<input name="iniciar" onclick="newPage(); return false;"
+	<form method="post" charset="utf-8">
+		<center>
+
+			<!-- <input name="iniciar" onclick="newPage(); return false;"
 					type="button" value=" Iniciar Sessão "
-					style="font-style: normal; font-size: x-large;">
+					style="font-style: normal; font-size: x-large;">  -->
 
-			<!--	<input name="iniciar" onclick="showAlert(); return false;"
-					type="button" value="Iniciar Sessão"
-					style="font-style: normal; font-size: x-large;"> -->
-			</center>
+			<input name="iniciar" onclick="showAlert(); return false;"
+				type="button" value="Iniciar Sessão"
+				style="font-style: normal; font-size: x-large;">
+		</center>
 
-		</form>
+	</form>
 
 </body>
 </html>
