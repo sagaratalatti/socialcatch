@@ -17,6 +17,7 @@
 	Facebook.prototype.request = function(path, callback) {
 	    PhoneGap.exec(callback, null, "FacebookAuth", "request", [path]);	
 	};
+		
 	
 	Facebook.prototype.getAccess = function(callback) {
 	    PhoneGap.exec(callback, null, "FacebookAuth", "getAccess", []);	

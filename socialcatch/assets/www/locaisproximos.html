@@ -5,7 +5,8 @@
 <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
 <title>Locais próximos</title>
 
-<link rel="stylesheet" type="text/css"href="lib/resources/css/sencha-touch.css" />
+<link rel="stylesheet" type="text/css"
+	href="lib/resources/css/sencha-touch.css" />
 <script type="text/javascript" src="lib/sencha-touch.js"></script>
 <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 
@@ -15,65 +16,95 @@
 <body>
 
 	<script type="text/javascript">
-	
-	//Localização!!
-	
+		var latitude, longitude, nomelist, placeid, placetipo, placenome, placedesc;
+		//Localização!!
 
-    // onSuccess Geolocation
-    //
-    function onSuccess(position) {
-    	
-    	alert('Latitude:'+position.coords.latitude+' Longitude:'+  position.coords.longitude);
-      
-    	Ext.util.JSONP.request({
-			url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
-			callbackkey: 'callback',
-			callback: function(data){
-				var nomelist = data.places;
-				placesproximos.update(nomelist);
-				
-			}
-		});
-		
-    }
+		function updatePlacesProcura() {
+			Ext.util.JSONP.request({
+				url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+				callbackkey : 'callback',
+				callback : function(data) {
+					var nomelist = data.places;
+					placesprocura.update(nomelist);
 
-    // onError Callback receives a PositionError object
-    //
-    function onError(error) {
-        alert('code: '    + error.code    + '\n' +
-              'message: ' + error.message + '\n');
-    }
+				}
+			});
+		}
 
- // process the confirmation dialog result
-    function onConfirm(button) {
-        alert('Você selecionou:' + button);
-        if(button==1){
-        	window.open('mural.html');
-        }
-    }
+		function updatePlacesProximos() {
+			Ext.util.JSONP.request({
+				url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+				callbackkey : 'callback',
+				callback : function(data) {
+					nomelist = data.places;
+					placesproximos.update(nomelist);
 
-    
-		function clickListItem(id) {
+				}
+			});
+		}
 
-			navigator.notification.confirm(
-			        'Deseja efetuar check-in?',  // message
-			        onConfirm,              // callback to invoke with index of button pressed
-			        'Check-in',            // title
-			        'Sim,Não'          // buttonLabels
-			    );
+		// onSuccess Geolocation
+		//
 
+		function onSuccess(position) {
+
+			alert('Latitude:' + position.coords.latitude + ' Longitude:'
+					+ position.coords.longitude);
+			latitude = position.coords.latitude;
+			longitude = position.coords.longitude;
+			updatePlacesProximos();
 
 		}
 
-		Ext.setup({
+		// onError Callback receives a PositionError object
+		//
+		function onError(error) {
+			alert('code: ' + error.code + '\n' + 'message: ' + error.message
+					+ '\n');
+		}
+
+		// process the confirmation dialog result
+		function onConfirm(button) {
+			//alert('Você selecionou:' + button);
+			if (button == 1) {
+				//window.location.href='mural.html?latitude=1.1111&longitude=2.222222';
+				window.location.href = "mural.html?latitude=" + latitude
+						+ "&longitude=" + longitude + "&placeid=" + placeid
+						+ "&placetipo=" + placetipo + "&placenome=" + placenome
+						+ "&placedesc=" + placedesc;
+			}
+		}
+
+		function clickListItem(id) {
+			var x;
+
+			for (x = 0; x < nomelist.length; x++) {
+				if (id == nomelist[x].id) {
+					placeid = nomelist[x].id;
+					placetipo = nomelist[x].tipo;
+					placenome = nomelist[x].nome;
+					placedesc = nomelist[x].descricao;
+
+				}
+			}
+
+			navigator.notification.confirm('Deseja efetuar check-in?', // message
+			onConfirm, // callback to invoke with index of button pressed
+			'Check-in', // title
+			'Sim,Não' // buttonLabels
+			);
+
+		}
+
+		Ext
+				.setup({
 
 					onReady : function() {
-						
+
 						//Registar o callback para quando tiver a localização...
-						navigator.geolocation.getCurrentPosition(onSuccess, onError);
-						
-					
-						
+						navigator.geolocation.getCurrentPosition(onSuccess,
+								onError);
+
 						placesproximos = new Ext.Component(
 								{
 									title : "Places Próximos",
@@ -82,111 +113,83 @@
 											'<tpl for="."  >',
 											'<div id={id} onClick="clickListItem(id)" style="margin-top:3px">',
 											'<img alt="" height="45" src="{tipo}" width="45" style="margin-right:10px; float:left  "  ><h2 style="font-weight: bold"> {nome}</h2><h3> {descricao}</h3>',
-											'<hr>',
-											'</div>',
-											'</tpl>' ]
+											'<hr>', '</div>', '</tpl>' ]
 
 								});
-						
-						
-						
+
 						placesprocura = new Ext.Component(
 								{
-									layout: 'fit',
-									style: 'padding-bottom:10px;',
+									layout : 'fit',
+									style : 'padding-bottom:10px;',
 									tpl : [
 											'<tpl for="."  >',
 											'<div id={id} onClick="clickListItem(id)" style="margin-top:3px">',
 											'<img alt="" height="45" src="{tipo}" width="45" style="margin-right:10px; float:left  "  ><h2 style="font-weight: bold"> {nome}</h2><h3> {descricao}</h3>',
-											'<hr>',
-											'</div>',
-											'</tpl>' ]
+											'<hr>', '</div>', '</tpl>' ]
 
 								});
-					
-					
-						
+
 						searchPanel = new Ext.Panel({
-				            padding: 10,
-				            layout: {
-				                type: 'hbox',
-				                align: 'stretch'
-				            },
-				            items: [{
-				                flex: 3,
-				                xtype: 'textfield',
-				                style: 'margin-right: 10px;',
-				                id: 'textquery'
-				            },{
-				                flex: 2,
-				                xtype: 'button',
-				                text: 'Procurar',
-				                handler: function() {
-				                	alert("Olá Mundo");
-				                	
-				                	Ext.util.JSONP.request({
-				            			url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
-				            			callbackkey: 'callback',
-				            			callback: function(data){
-				            				var nomelist = data.places;
-				            				placesprocura.update(nomelist);
-				            				
-				            			}
-				            		});
-				                    //var query = Ext.getCmp("textquery").getValue();
-				                    //Ext.Ajax.request({
-				                        //url: 'index.php?act=search&q='+query,
-				                        //url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
-				                        //success: function(e) {
-				                            //var obj = Ext.util.JSON.decode(e.responseText);
-				                           // var msg = obj.results;
-				                        //    var html = tpl.apply(msg);
-				                         //  alert(msg);
-				                       //    placesproximos.update(msg);
-				                     //   }
-				                   //});
-				                }
-				            }]
-				        });
-						
-						
-						
-						var placespornome = new Ext.Panel({	
+							padding : 10,
+							layout : {
+								type : 'hbox',
+								align : 'stretch'
+							},
+							items : [ {
+								flex : 3,
+								xtype : 'textfield',
+								style : 'margin-right: 10px;',
+								id : 'textquery'
+							}, {
+								flex : 2,
+								xtype : 'button',
+								text : 'Procurar',
+								handler : function() {
+
+									updatePlacesProcura();
+									//var query = Ext.getCmp("textquery").getValue();
+									//Ext.Ajax.request({
+									//url: 'index.php?act=search&q='+query,
+									//url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+									//success: function(e) {
+									//var obj = Ext.util.JSON.decode(e.responseText);
+									// var msg = obj.results;
+									//    var html = tpl.apply(msg);
+									//  alert(msg);
+									//    placesproximos.update(msg);
+									//   }
+									//});
+								}
+							} ]
+						});
+
+						var placespornome = new Ext.Panel({
 							title : "Procurar places",
-				            items: [searchPanel, placesprocura],
-				            scroll: 'vertical',
-				            //style: 'background: #DDEEF6;',
-				            fullscreen : true
-				        });
-
-						
-
-						var buttonsSpecTop = [ {
-							ui : 'back',
-							text : 'Back'
-						}, {
-							xtype : 'spacer'
-						}, {
-							ui : 'forward',
-							text : 'Forward'
-						} ]
+							items : [ searchPanel, placesprocura ],
+							scroll : 'vertical',
+							//style: 'background: #DDEEF6;',
+							fullscreen : true
+						});
 
 						var buttonsSpecBottom = [ {
-							ui : 'normal',
-							text : 'Normal'
+							flex : 2,
+							ui : 'back',
+							text : 'Sair'
 						}, {
-							ui : 'round',
-							text : 'Round'
-						}, {
+							flex : 3,
 							ui : 'action',
-							text : 'Action'
-						}, {
-							ui : 'confirm',
-							text : 'Confirm'
+							text : 'Actualizar'
 						} ]
 
 						var tapHandler = function(btn, evt) {
-							alert("Button '" + btn.text + "' tapped.");
+							//alert("Button '" + btn.text + "' tapped.");
+							if(btn.text=="Actualizar"){
+								updatePlacesProcura();
+								updatePlacesProximos();
+							}else if(btn.text=="Sair"){
+								window.location.href = "index.html";
+							}
+							
 						}
 
 						var dockedItems = [ {
@@ -206,11 +209,9 @@
 							dockedItems : dockedItems
 
 						});
-						
-						
+
 					}
 				});
-			    
 	</script>
 
 </body>
