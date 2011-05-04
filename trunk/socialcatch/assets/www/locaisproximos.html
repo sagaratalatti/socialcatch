@@ -16,7 +16,7 @@
 <body>
 
 	<script type="text/javascript">
-		var latitude, longitude, nomelist, placeid, placetipo, placenome, placedesc;
+		var latitude, longitude, nomelist, placeid, placetipo, placenome, placedesc, loading;
 		//Localização!!
 		
 		
@@ -70,11 +70,11 @@
 
 		function onSuccess(position) {
 
-			alert('Latitude:' + position.coords.latitude + ' Longitude:'
-					+ position.coords.longitude);
+			//alert('Latitude:' + position.coords.latitude + ' Longitude:'+ position.coords.longitude);
 			latitude = position.coords.latitude;
 			longitude = position.coords.longitude;
 			updatePlacesProximos();
+			loading.hide();
 
 		}
 
@@ -83,7 +83,10 @@
 		function onError(error) {
 			alert('code: ' + error.code + '\n' + 'message: ' + error.message
 					+ '\n');
+			loading.hide();
 		}
+		
+		
 
 		// process the confirmation dialog result
 		function onConfirm(button) {
@@ -124,6 +127,8 @@
 
 					onReady : function() {
 
+						loading = new Ext.LoadMask(Ext.getBody(), {msg: "A Obter a sua localização..."});
+						loading.show();
 						//Registar o callback para quando tiver a localização...
 						navigator.geolocation.getCurrentPosition(onSuccess,
 								onError);
