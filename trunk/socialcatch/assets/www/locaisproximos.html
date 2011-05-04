@@ -18,13 +18,25 @@
 	<script type="text/javascript">
 		var latitude, longitude, nomelist, placeid, placetipo, placenome, placedesc;
 		//Localização!!
+		
+		
+		
 
 		function updatePlacesProcura() {
 			Ext.util.JSONP.request({
-				url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+				//url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+				url : 'http://socialcatch.dyndns.org:8080/SocialCatch/rest/places/all',
 				callbackkey : 'callback',
 				callback : function(data) {
 					var nomelist = data.places;
+					var x;
+					for(x=0;x<nomelist.length;x++){
+						if(nomelist[x].tipo=="autocarro"){
+							nomelist[x].tipo="imgs/autocarro.jpg";
+						}else if(nomelist[x].tipo=="paragem"){
+							nomelist[x].tipo="";
+						}
+					}
 					placesprocura.update(nomelist);
 
 				}
@@ -33,10 +45,20 @@
 
 		function updatePlacesProximos() {
 			Ext.util.JSONP.request({
-				url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+				//url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+				url : 'http://socialcatch.dyndns.org:8080/SocialCatch/rest/places/all',
 				callbackkey : 'callback',
 				callback : function(data) {
 					nomelist = data.places;
+					
+					for(x=0;x<nomelist.length;x++){
+						if(nomelist[x].tipo=="autocarro"){
+							nomelist[x].tipo="imgs/autocarro.jpg";
+						}else if(nomelist[x].tipo=="paragem"){
+							nomelist[x].tipo="";
+						}
+					}
+					
 					placesproximos.update(nomelist);
 
 				}
@@ -67,7 +89,6 @@
 		function onConfirm(button) {
 			//alert('Você selecionou:' + button);
 			if (button == 1) {
-				//window.location.href='mural.html?latitude=1.1111&longitude=2.222222';
 				window.location.href = "mural.html?latitude=" + latitude
 						+ "&longitude=" + longitude + "&placeid=" + placeid
 						+ "&placetipo=" + placetipo + "&placenome=" + placenome
@@ -95,6 +116,8 @@
 			);
 
 		}
+		
+		
 
 		Ext
 				.setup({
@@ -112,7 +135,7 @@
 									tpl : [
 											'<tpl for="."  >',
 											'<div id={id} onClick="clickListItem(id)" style="margin-top:3px">',
-											'<img alt="" height="45" src="{tipo}" width="45" style="margin-right:10px; float:left  "  ><h2 style="font-weight: bold"> {nome}</h2><h3> {descricao}</h3>',
+											'<img id={tipo} alt="" height="45" src="{tipo}" width="45" style="margin-right:10px; float:left  "  ><h2 style="font-weight: bold"> {nome}</h2><h3> {descricao}</h3>',
 											'<hr>', '</div>', '</tpl>' ]
 
 								});
