@@ -7,18 +7,18 @@
 <link rel="stylesheet" type="text/css"
 	href="lib/resources/css/sencha-touch.css" />
 <script type="text/javascript" src="lib/sencha-touch.js"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript"
+	src="http://maps.google.com/maps/api/js?sensor=true"></script>
 
 
 </head>
 <body>
 
 	<script type="text/javascript">
-		var latitude, longitude, autocarro, nomelist,utilizadorescheckedin,muralbottom;
+		var latitude, longitude, autocarro, nomelist, utilizadorescheckedin, muralbottom;
 
-		function updateCheckIn(){
-			Ext.util.JSONP
-			.request({
+		function updateCheckIn() {
+			Ext.util.JSONP.request({
 				url : 'http://dl.dropbox.com/u/1301044/JSON/checkin.json',
 				callbackkey : 'callback',
 				callback : function(data) {
@@ -26,12 +26,11 @@
 					utilizadorescheckedin.update(nomelist);
 
 				}
-			});	
+			});
 		}
-		
-		function updateMural(){
-			Ext.util.JSONP
-			.request({
+
+		function updateMural() {
+			Ext.util.JSONP.request({
 				url : 'http://dl.dropbox.com/u/1301044/JSON/msg.json',
 				callbackkey : 'callback',
 				callback : function(data) {
@@ -41,13 +40,12 @@
 				}
 			});
 		}
-		
-		
-		Ext.setup({
+
+		Ext
+				.setup({
 
 					onReady : function() {
-						var tabBar, muraltop, mural, mapa, buttonsSpecTop, buttonsSpecBottom, tapHandler, dockedItems, panel, 
-						tabBar, buttonsSpecBottom2, dockedItems, segundomenu=0;
+						var tabBar, muraltop, mural, mapa, buttonsSpecTop, buttonsSpecBottom, tapHandler, dockedItems, panel, tabBar, buttonsSpecBottom2, dockedItems, segundomenu = 0;
 
 						//alert("Search:"+window.location.search);
 						var search = window.location.search;
@@ -55,44 +53,76 @@
 						var coord = search.substr(1).split("&");
 						latitude = coord[0].replace("latitude=", "");
 						longitude = coord[1].replace("longitude=", "");
-						
+
 						autocarro = new Object();
-						autocarro.id = unescape(coord[2].replace("placeid=",""));
-						autocarro.tipo = unescape(coord[3].replace("placetipo=",""));
-						autocarro.nome = unescape(coord[4].replace("placenome=",""));
-						autocarro.desc = unescape(coord[5].replace("placedesc=",""));
-						
-						
+						autocarro.id = unescape(coord[2]
+								.replace("placeid=", ""));
+						autocarro.tipo = unescape(coord[3].replace(
+								"placetipo=", ""));
+						autocarro.nome = unescape(coord[4].replace(
+								"placenome=", ""));
+						autocarro.desc = unescape(coord[5].replace(
+								"placedesc=", ""));
+
 						//alert(latitude + longitude)
-//+"&"+placeid+"&"+placetipo+"&"+placenome+"&"+placedesc
+						//+"&"+placeid+"&"+placetipo+"&"+placenome+"&"+placedesc
 						var myLatlng = new google.maps.LatLng(latitude,
 								longitude);
 
-						muraltop = new Ext.Component({
-							title : "Mural",
-							tpl : [
-							        '<tpl for="."  >',
-									'<div id={id} onClick="clickListItem(id)" style="margin-top:3px">',
-									'<img alt="" height="45" src="{tipo}" width="45" style="margin-right:10px; float:left  "  ><h2 style="font-weight: bold"> {nome}</h2><h3> {desc}</h3>',
-									'<hr size="2" color="blue">',
-									'</div>',
-									'</tpl>' ]
+						muraltop = new Ext.Panel({
+							padding : 10,
+							layout : {
+								type : 'hbox',
+								align : 'stretch'
+							},
+							items : [ {
+								flex : 3,
+								xtype : 'textfield',
+								style : 'margin-right: 10px;',
+								id : 'textquery',
+								placeHolder : 'Diz o que pensas!'
+							}, {
+								flex : 2,
+								xtype : 'button',
+								text : 'Enviar',
+								handler : function() {
+
+									//var query = Ext.getCmp("textquery").getValue();
+									//Ext.Ajax.request({
+									//url: 'index.php?act=search&q='+query,
+									//url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
+									//success: function(e) {
+									//var obj = Ext.util.JSON.decode(e.responseText);
+									// var msg = obj.results;
+									//    var html = tpl.apply(msg);
+									//  alert(msg);
+									//    placesproximos.update(msg);
+									//   }
+									//});
+								}
+							} ]
+
+						//tpl : [
+						//       '<tpl for="."  >',
+						//	'<div id={id} onClick="clickListItem(id)" style="margin-top:3px">',
+						//'<img alt="" height="45" src="{tipo}" width="45" style="margin-right:10px; float:left  "  ><h2 style="font-weight: bold"> {nome}</h2><h3> {desc}</h3>',
+						//'<hr size="2" color="blue">',
+						//'</div>',
+						//'</tpl>' ]
 
 						});
-						
-						
 
-						muralbottom = new Ext.Component({
-							title : "Mural",
-							scroll : 'vertical',
-							tpl : [
-									'<tpl for="."  >',
-									'<div  style="margin-top:3px">',
-									'<img alt="" height="45" src="{foto}" width="45" style="margin-right:10px; float:left  "  ><h2 style="font-weight: bold"> {nome} disse:</h2><h3>{mensagem}</h3><h4> Às {hora} - {data}</h4>',
-									'<hr>', '</div>', '</tpl>' ]
+						muralbottom = new Ext.Component(
+								{
+									title : "Mural",
+									scroll : 'vertical',
+									tpl : [
+											'<tpl for="."  >',
+											'<div  style="margin-top:3px">',
+											'<img alt="" height="45" src="{foto}" width="45" style="margin-right:10px; float:left  "  ><h2 style="font-weight: bold"> {nome} disse:</h2><h3>{mensagem}</h3><h4> Às {hora} - {data}</h4>',
+											'<hr>', '</div>', '</tpl>' ]
 
-
-						});
+								});
 
 						mural = new Ext.Panel({
 							title : "Mural",
@@ -122,10 +152,6 @@
 
 								});
 
-						  var btnToAdd = new Ext.Button({
-					            text: 'Simple Button'
-					        });
-
 						buttonsSpecBottom = [ {
 							flex : 2,
 							ui : 'back',
@@ -138,71 +164,69 @@
 							flex : 2,
 							ui : 'action',
 							text : 'Amigos'
-						},{
+						}, {
 							flex : 1,
 							ui : 'foward',
 							text : '+'
-						}
-									 ]
-						
-						
+						} ]
 
 						tapHandler = function(btn, evt) {
 							//alert("Button '" + btn.text + "' tapped.");
 
-							if(btn.text=="Actualizar"){
+							if (btn.text == "Actualizar") {
 								updateCheckIn();
 								updateMural();
-							}else if(btn.text=="+"){
-								if(segundomenu==0){
-								buttonsSpecBottom2 = [ {
-									flex : 2,
-									ui : 'action',
-									text : 'Places++'
-								}, {
-									flex : 3,
-									ui : 'action',
-									text : 'Actualizar'
-								}, {
-									flex : 2,
-									ui : 'action',
-									text : 'Amigos'
-								},{
-									flex : 1,
-									ui : 'back',
-									text : '-',
-									color : 'red'
+							} else if (btn.text == "+") {
+								if (segundomenu == 0) {
+
+									buttonsSpecBottom2 = [ {
+										flex : 2,
+										ui : 'action',
+										text : 'Horário'
+									}, {
+										flex : 3,
+										ui : 'action',
+										text : 'teste'
+									}, {
+										flex : 2,
+										ui : 'action',
+										text : 'teste'
+									}, {
+										flex : 1,
+										ui : 'back',
+										text : '-',
+										color : 'red'
+									} ]
+
+									dockedItems2 = [ {
+										xtype : 'toolbar',
+										ui : 'dark',
+										dock : 'bottom',
+										itemId : 'botoes2',
+										items : buttonsSpecBottom2,
+										defaults : {
+											handler : tapHandler
+										}
+									} ]
+									//var componente = panel.getDockedComponent('botoes');
+									//componente.add(btnToAdd);
+									//componente.doComponentLayout();
+									panel.addDocked(dockedItems2);
+									panel.doComponentLayout();
+									segundomenu = 1;
 								}
-											 ]
-								
-								dockedItems2 = [ {
-									xtype : 'toolbar',
-									ui : 'dark',
-									dock : 'bottom',
-									itemId : 'botoes2',
-									items : buttonsSpecBottom2,
-									defaults : {
-										handler : tapHandler
-									}
-								} ]
-								//var componente = panel.getDockedComponent('botoes');
-		                        //componente.add(btnToAdd);
-		                        //componente.doComponentLayout();
-								panel.addDocked(dockedItems2);
-								panel.doComponentLayout();
-								segundomenu=1;
-								}	
-							}else if(btn.text=="-"){
-							
-								if(segundomenu==1){
-							var componente = panel.getDockedComponent('botoes2');
-	                        //componente.add(btnToAdd);
-	                        panel.removeDocked(componente);
-							
-							panel.doComponentLayout();
-							segundomenu=0;	
+							} else if (btn.text == "-") {
+
+								if (segundomenu == 1) {
+									var componente = panel
+											.getDockedComponent('botoes2');
+									//componente.add(btnToAdd);
+									panel.removeDocked(componente);
+
+									panel.doComponentLayout();
+									segundomenu = 0;
 								}
-						}
+							}
 						}
 
 						dockedItems = [ {
@@ -215,8 +239,6 @@
 								handler : tapHandler
 							}
 						} ]
-						
-						
 
 						panel = new Ext.TabPanel({
 							fullscreen : true,
@@ -240,12 +262,8 @@
 									infowindow.open(mapa.map, marker);
 								});
 
-						
-						
-						
 						updateCheckIn();
 						updateMural();
-						muraltop.update(autocarro);
 
 						/*		
 							tabBar = panel.getTabBar();
