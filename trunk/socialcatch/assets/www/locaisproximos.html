@@ -46,7 +46,7 @@
 		function updatePlacesProximos() {
 			Ext.util.JSONP.request({
 				//url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
-				url : 'http://socialcatch.dyndns.org:8080/SocialCatch/rest/places/all',
+				url : 'http://socialcatch.dyndns.org:8080/SocialCatch/rest/places/'+latitude+'/'+longitude+'/',
 				callbackkey : 'callback',
 				callback : function(data) {
 					nomelist = data.places;

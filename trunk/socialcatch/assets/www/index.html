@@ -12,9 +12,10 @@
 
 
 
-
+<script type="text/javascript" src="lib/sencha-touch.js"></script>
 <script type="text/javascript" charset="utf-8" src="phonegap.js"></script>
 <script type="text/javascript" charset="utf-8" src="facebook.js"></script>
+
 
 <script type="text/javascript" charset="utf-8">
 	// Wait for PhoneGap to load
@@ -43,17 +44,50 @@
 	// Show a custom alert
 	//
 	
-	function showAlert() {
+	function facebookLogin() {
+		var username, id, link, nome, amigos;
 		
 		
 		appId = 217027698311123; // this is your facebook app id
 		window.plugins.facebook.authorize(appId, function(res) {
 			alert(res.name); 
+			username  = res.name;
 			window.plugins.facebook.request("me/friends",function(res){
 			        alert(res.data[0].name); 
+			        amigos = '{"data": [';
+			        var a;
+			        for(a=0;a<res.data.length;a++){
+			        	amigos = amigos+ '{"name" :"'+res.data[a].name+'", "id":"'+res.data[a].id+'"},'
+			        	}
+			        
+			        amigos = amigos+']}';
 			        window.plugins.facebook.request("me",function(res){
 				        alert(res.link);
-				        window.open('locaisproximos.html');
+				        link =  res.link+"/picture";
+				        id = res.id;
+				        var corpo = {"id":id,"login":"tlc","link":link,"nome":username,"amigos":res};
+				        //var corpo = '{"id":"99999999","login":"tlc","link":"htt:minha_foto_sem_barras.jpg","nome":"Manuel","amigos":{"data":[{"name": "Coiso","id": "1000002345"},{"name": "Cenas","id": "1002347575"}]}}';
+				        console.log(corpo);
+				        var header = Ext.Ajax.defaultHeaders = {
+				        		'Content-Type': 'application/json'
+				        		};
+				        var data= 'data';
+				        Ext.Ajax.request({
+				            url : 'http://socialcatch.dyndns.org:8080/SocialCatch/rest/utilizadores/',
+				            method: 'POST',
+				            defaultHeaders: header,	
+				            jsonData: Ext.util.JSON.encode(corpo),
+				            //jsonData: { data:'{"id":"'+id+'","login":"tlc","link":"'+link+'","nome":"'+username+'","amigos":'+amigos+'}'},
+				            success: function ( result, request ) {				                    	
+				                         alert("Sucesso:"+result.responseText);
+				                         window.open('locaisproximos.html'); 
+				             },
+				            failure: function ( result, request ) {
+				                    	 alert("Insucesso:"+result.responseText);
+				                  },
+				          });
+				       
+		        
 				    });
 			    });
 			
@@ -87,7 +121,7 @@
 					type="button" value=" Iniciar Sessão "
 					style="font-style: normal; font-size: x-large;">  -->
 
-			<input name="iniciar" onclick="showAlert(); return false;"
+			<input name="iniciar" onclick="facebookLogin(); return false;"
 				type="button" value="Iniciar Sessão"
 				style="font-style: normal; font-size: x-large;">
 		</center>
