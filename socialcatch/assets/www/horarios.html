@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Horários</title>
+
+<link rel="stylesheet" type="text/css" href="lib/resources/css/sencha-touch.css" />
+<script type="text/javascript" src="lib/sencha-touch.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+var horariosBraga = new Array();
+var agora = new Date();
+var horas = agora.getHours();
+var minutos = agora.getMinutes();
+
+function preencherHorario(){
+	
+	var horarios = new Object();
+	horarios.hora=8;
+	horarios.min=00;
+	horarios.desc="AE via Avenida";
+	
+	if(horas<=horarios.hora) horariosBraga[0] = horarios;
+	
+	
+	var horarios = new Object();
+	horarios.hora=8;
+	horarios.min=00;
+	horarios.desc="AE Directo";
+	
+	if(horas<=horarios.hora) horariosBraga[1] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=8;
+	horarios.min=10;
+	horarios.desc="via Hospital GMR - Não para na GALP";
+	
+	if(horas<=horarios.hora) horariosBraga[2] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=8;
+	horarios.min=25;
+	horarios.desc="AE Directo";
+	
+	if(horas<=horarios.hora) horariosBraga[3] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=8;
+	horarios.min=25;
+	horarios.desc="AE via Avenida";
+	
+	if(horas<=horarios.hora) horariosBraga[4] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=9;
+	horarios.min=10;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[5] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=10;
+	horarios.min=10;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[6] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=12;
+	horarios.min=0;
+	horarios.desc="AE via Avenida";
+	
+	if(horas<=horarios.hora) horariosBraga[7] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=12;
+	horarios.min=20;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[8] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=13;
+	horarios.min=00;
+	horarios.desc="AE via Hospital de GMR";
+	
+	if(horas<=horarios.hora) horariosBraga[9] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=13;
+	horarios.min=10;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[10] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=13;
+	horarios.min=30;
+	horarios.desc="AE via Avenida";
+	
+	if(horas<=horarios.hora) horariosBraga[11] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=15;
+	horarios.min=10;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[12] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=16;
+	horarios.min=10;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[13] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=16;
+	horarios.min=30;
+	horarios.desc="AE via Avenida";
+	
+	if(horas<=horarios.hora) horariosBraga[14] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=17;
+	horarios.min=30;
+	horarios.desc="AE via PSP";
+	
+	if(horas<=horarios.hora) horariosBraga[15] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=18;
+	horarios.min=00;
+	horarios.desc="AE Directo";
+	
+	if(horas<=horarios.hora) horariosBraga[16] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=18;
+	horarios.min=10;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[17] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=19;
+	horarios.min=10;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[18] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=20;
+	horarios.min=10;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[19] = horarios;
+	
+	var horarios = new Object();
+	horarios.hora=22;
+	horarios.min=10;
+	horarios.desc="";
+	
+	if(horas<=horarios.hora) horariosBraga[20] = horarios;
+	
+	
+	
+}
+
+
+
+Ext
+.setup({
+
+	onReady : function() {
+
+	var braga;
+	preencherHorario();
+	
+	
+	
+	braga = new Ext.Component(
+			{
+				title : "Braga",
+				scroll : 'vertical',
+				tpl : [
+						'<tpl for="."  >',
+						'<div style="margin-top:3px">',
+						'<h2>{hora}h{min}m <b>{desc}</b></h2>',
+						'<hr>', '</div>', '</tpl>' ]
+
+			});
+	
+	guimaraes = new Ext.Component(
+			{
+				title : "Guimarães",
+				scroll : 'vertical',
+				tpl : [
+						'<tpl for="."  >',
+						'<div style="margin-top:3px">',
+						'<h2>{hora}h{min}</h2><h3> {desc}</h3>',
+						'<hr>', '</div>', '</tpl>' ]
+
+			});
+
+		var panel = new Ext.TabPanel({
+			fullscreen : true,
+			animation : 'slide',
+			items : [ braga, guimaraes ]
+
+		});
+		
+		braga.update(horariosBraga);
+
+	}
+});
+
+</script>
+</body>
+</html>

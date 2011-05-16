@@ -4,11 +4,9 @@
 <meta charset="ISO-8859-1">
 <title>Mural</title>
 
-<link rel="stylesheet" type="text/css"
-	href="lib/resources/css/sencha-touch.css" />
+<link rel="stylesheet" type="text/css" href="lib/resources/css/sencha-touch.css" />
 <script type="text/javascript" src="lib/sencha-touch.js"></script>
-<script type="text/javascript"
-	src="http://maps.google.com/maps/api/js?sensor=true"></script>
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=true"></script>
 
 
 </head>
@@ -182,11 +180,11 @@
 									buttonsSpecBottom2 = [ {
 										flex : 2,
 										ui : 'action',
-										text : 'Horário'
+										text : 'Seguir'
 									}, {
 										flex : 3,
 										ui : 'action',
-										text : 'teste'
+										text : 'Horário'
 									}, {
 										flex : 2,
 										ui : 'action',
@@ -194,8 +192,7 @@
 									}, {
 										flex : 1,
 										ui : 'back',
-										text : '-',
-										color : 'red'
+										text : '-',										
 									} ]
 
 									dockedItems2 = [ {
@@ -226,6 +223,8 @@
 									panel.doComponentLayout();
 									segundomenu = 0;
 								}
+							}else if(btn.text=="Horário"){
+								window.location.href = "horarios.html";
 							}
 						}
 
