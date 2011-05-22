@@ -16,7 +16,7 @@
 <body>
 
 	<script type="text/javascript">
-		var latitude, longitude, nomelist, placeid, placetipo, placenome, placedesc, loading;
+		var latitude, longitude, nomelist, placeid, placetipo, placenome, placedesc, loading, fbId, idPlace;
 		//Localização!!
 		
 		
@@ -25,7 +25,7 @@
 		function updatePlacesProcura() {
 			Ext.util.JSONP.request({
 				//url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
-				url : 'http://socialcatch.dyndns.org:8080/SocialCatch/rest/places/all',
+				url : 'http://socialcatch.dyndns.org:8080/SocialCatchServer/Places?nome=sandro',
 				callbackkey : 'callback',
 				callback : function(data) {
 					var nomelist = data.places;
@@ -46,11 +46,10 @@
 		function updatePlacesProximos() {
 			Ext.util.JSONP.request({
 				//url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
-				url : 'http://socialcatch.dyndns.org:8080/SocialCatch/rest/places/'+latitude+'/'+longitude+'/',
+				url : 'http://socialcatch.dyndns.org:8080/SocialCatchServer/Places?lat='+latitude+'&long='+longitude+'',
 				callbackkey : 'callback',
 				callback : function(data) {
 					nomelist = data.places;
-					
 					for(x=0;x<nomelist.length;x++){
 						if(nomelist[x].tipo=="autocarro"){
 							nomelist[x].tipo="imgs/autocarro.jpg";
@@ -75,6 +74,7 @@
 			longitude = position.coords.longitude;
 			updatePlacesProximos();
 			loading.hide();
+			
 
 		}
 
@@ -90,17 +90,31 @@
 
 		// process the confirmation dialog result
 		function onConfirm(button) {
-			//alert('Você selecionou:' + button);
+			
+			var corpo = {"id":fbId, "idplace":idPlace, "latitude": latitude, "longitude":longitude};
+			
 			if (button == 1) {
-				window.location.href = "mural.html?latitude=" + latitude
-						+ "&longitude=" + longitude + "&placeid=" + placeid
-						+ "&placetipo=" + placetipo + "&placenome=" + placenome
-						+ "&placedesc=" + placedesc;
+				
+				Ext.Ajax.request({
+		            url : 'http://socialcatch.dyndns.org:8080/SocialCatchServer/Checkin',
+		            method: 'POST',
+		            jsonData: corpo,
+		            success: function ( result, request ) {				                    	
+		                         
+		                         window.location.href = "mural.html?latitude=" + latitude
+		 						+ "&longitude=" + longitude + "&id="+fbId + "&placeid="+idPlace;
+		             },
+		            failure: function ( result, request ) {
+		                    	 alert("Insucesso:"+result.responseText);
+		                  },
+		          });
+		       
+				
 			}
 		}
 
 		function clickListItem(id) {
-			var x;
+			idPlace = id;
 
 			for (x = 0; x < nomelist.length; x++) {
 				if (id == nomelist[x].id) {
@@ -132,7 +146,12 @@
 						//Registar o callback para quando tiver a localização...
 						navigator.geolocation.getCurrentPosition(onSuccess,
 								onError);
+						
+						var search = window.location.search;
+						var coord = search.substr(1).split("&");
+						fbId = coord[0].replace("id=", "");
 
+						
 						placesproximos = new Ext.Component(
 								{
 									title : "Places Próximos",
@@ -175,18 +194,7 @@
 								handler : function() {
 
 									updatePlacesProcura();
-									//var query = Ext.getCmp("textquery").getValue();
-									//Ext.Ajax.request({
-									//url: 'index.php?act=search&q='+query,
-									//url : 'http://dl.dropbox.com/u/1301044/JSON/test.json',
-									//success: function(e) {
-									//var obj = Ext.util.JSON.decode(e.responseText);
-									// var msg = obj.results;
-									//    var html = tpl.apply(msg);
-									//  alert(msg);
-									//    placesproximos.update(msg);
-									//   }
-									//});
+							
 								}
 							} ]
 						});

@@ -18,6 +18,8 @@
 
 
 <script type="text/javascript" charset="utf-8">
+	var loading;
+	
 	// Wait for PhoneGap to load
 	//
 	function onLoad() {
@@ -28,11 +30,11 @@
 	//
 	function onDeviceReady() {
 		// Empty
-		if (window.devicePixelRatio == 1.5) {
-			  alert("This is a high-density screen");
-			} else if (window.devicePixelRation == 0.75) {
-			  alert("This is a low-density screen");
-			}
+		//if (window.devicePixelRatio == 1.5) {
+			//  alert("This is a high-density screen");
+			//} else if (window.devicePixelRation == 0.75) {
+			 // alert("This is a low-density screen");
+			//}
 
 	}
 
@@ -50,10 +52,11 @@
 		
 		appId = 217027698311123; // this is your facebook app id
 		window.plugins.facebook.authorize(appId, function(res) {
-			alert(res.name); 
+			
 			username  = res.name;
 			window.plugins.facebook.request("me/friends",function(res){
-			        alert(res.data[0].name); 
+			      
+			        var amigosF = res;
 			        amigos = '{"data": [';
 			        var a;
 			        for(a=0;a<res.data.length;a++){
@@ -62,28 +65,28 @@
 			        
 			        amigos = amigos+']}';
 			        window.plugins.facebook.request("me",function(res){
-				        alert(res.link);
-				        link =  res.link+"/picture";
+				       
+				        link =  'http://graph.facebook.com/'+res.username+'/picture';
 				        id = res.id;
-				        var corpo = {"id":id,"login":"tlc","link":link,"nome":username,"amigos":res};
-				        //var corpo = '{"id":"99999999","login":"tlc","link":"htt:minha_foto_sem_barras.jpg","nome":"Manuel","amigos":{"data":[{"name": "Coiso","id": "1000002345"},{"name": "Cenas","id": "1002347575"}]}}';
-				        console.log(corpo);
+				        var corpo = {"id":id,"link":link,"nome":username,"amigos":amigosF}; 
 				        var header = Ext.Ajax.defaultHeaders = {
 				        		'Content-Type': 'application/json'
 				        		};
-				        var data= 'data';
-				        Ext.Ajax.request({
-				            url : 'http://socialcatch.dyndns.org:8080/SocialCatch/rest/utilizadores/',
+				        loading = new Ext.LoadMask(Ext.getBody(), {msg: "A enviar a sua informação..."});
+						loading.show();
+				        Ext.Ajax.request({				        
+				            url : 'http://socialcatch.dyndns.org:8080/SocialCatchServer/Utilizadores',
 				            method: 'POST',
 				            defaultHeaders: header,	
-				            jsonData: Ext.util.JSON.encode(corpo),
+				            jsonData: corpo,
 				            //jsonData: { data:'{"id":"'+id+'","login":"tlc","link":"'+link+'","nome":"'+username+'","amigos":'+amigos+'}'},
 				            success: function ( result, request ) {				                    	
-				                         alert("Sucesso:"+result.responseText);
-				                         window.open('locaisproximos.html'); 
+				            	loading.hide();
+				                         window.location.href = "locaisproximos.html?id="+id; 
 				             },
 				            failure: function ( result, request ) {
-				                    	 alert("Insucesso:"+result.responseText);
+				            				loading.hide();
+				                    	 alert("Impossivel ligar, verifique a sua conectividade à rede!");
 				                  },
 				          });
 				       

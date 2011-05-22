@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Badges</title>
+<link rel="stylesheet" type="text/css"
+	href="lib/resources/css/sencha-touch.css" />
+<script type="text/javascript" src="lib/sencha-touch.js"></script>
+</head>
+<body>
+	<script type="text/javascript">
+
+	var search = window.location.search;
+	var coord = search.substr(1).split("&");
+	var latitude = coord[0].replace("latitude=", "");
+	var longitude = coord[1].replace("longitude=", "");	
+	var fbId= coord[2].replace("id=", "");
+	var placeId = coord[3].replace("placeid=","");
+	var loading;
+	
+	function updateBadges() {
+		Ext.util.JSONP.request({
+			url : 'http://socialcatch.dyndns.org:8080/SocialCatchServer/Badge?userid='+fbId,
+			callbackkey : 'callback',
+			callback : function(data) {
+				var badges = data.badges;
+				badgesPanel.update(badges);
+				loading.hide();
+			}
+		});
+	}
+	
+	Ext.setup({
+
+		onReady : function() {
+			
+
+			loading = new Ext.LoadMask(Ext.getBody(), {msg: "A Obter lista de badges..."});
+			loading.show();
+			badgesPanel = new Ext.Component({
+				title : "Badges Conquistados",
+				scroll : 'vertical',
+				tpl : [ '<tpl for="."  >', '<div style="margin-top:3px ; margin-left:3px;">',
+						'<h2><b>{nome}</b> - {descricao}</h2>', '<hr>',
+						'</div>', '</tpl>' ]
+
+			});
+			
+			var buttonsSpecBottom = [ {
+				ui : 'back',
+				text : 'Sair'
+			} ]
+
+			var tapHandler = function(btn, evt) {
+			
+				window.location.href = "mural.html?latitude=" + latitude
+				+ "&longitude=" + longitude + "&id="+fbId + "&placeid="+placeId;
+				
+			}
+			
+			var dockedItems = [ {
+				xtype : 'toolbar',
+				ui : 'dark',
+				dock : 'bottom',
+				items : buttonsSpecBottom,
+				defaults : {
+					handler : tapHandler
+				}
+			} ]
+
+			var panel = new Ext.TabPanel({
+				fullscreen : true,
+				animation : 'slide',
+				items : [badgesPanel],
+				dockedItems : dockedItems
+			});
+
+			updateBadges();
+		}
+	});
+	
+	
+	</script>
+</body>
+</html>

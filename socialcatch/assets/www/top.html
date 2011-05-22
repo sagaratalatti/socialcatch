@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>TOP Badges</title>
+<link rel="stylesheet" type="text/css"
+	href="lib/resources/css/sencha-touch.css" />
+<script type="text/javascript" src="lib/sencha-touch.js"></script>
+</head>
+<body>
+
+	<script type="text/javascript">
+
+	var search = window.location.search;
+	var coord = search.substr(1).split("&");
+	var latitude = coord[0].replace("latitude=", "");
+	var longitude = coord[1].replace("longitude=", "");	
+	var fbId= coord[2].replace("id=", "");
+	var placeId = coord[3].replace("placeid=","");
+	
+	
+	function updateTop() {
+		Ext.util.JSONP.request({
+			url : 'http://socialcatch.dyndns.org:8080/SocialCatchServer/Checkin?place='+placeId,
+			callbackkey : 'callback',
+			callback : function(data) {
+				var top = data.top;
+				topPanel.update(top);
+
+			}
+		});
+	}
+	
+	Ext.setup({
+
+		onReady : function() {
+			
+			
+			topPanel = new Ext.Component({
+				title : "Top De Utilizadores Com Mais Badges",
+				scroll : 'vertical',
+				tpl : [ '<tpl for="."  >', '<div style="margin-top:3px; margin-left:3px; ">',
+						'<h2>{hora}h{min}m <b>{desc}</b></h2>', '<hr>',
+						'</div>', '</tpl>' ]
+
+			});
+			
+			var buttonsSpecBottom = [ {
+				ui : 'back',
+				text : 'Sair'
+			} ]
+
+			var tapHandler = function(btn, evt) {
+			
+				window.location.href = "mural.html?latitude=" + latitude
+				+ "&longitude=" + longitude + "&id="+fbId + "&placeid="+placeId;
+ 
+				
+			}
+			
+			var dockedItems = [ {
+				xtype : 'toolbar',
+				ui : 'dark',
+				dock : 'bottom',
+				items : buttonsSpecBottom,
+				defaults : {
+					handler : tapHandler
+				}
+			} ]
+
+			var panel = new Ext.TabPanel({
+				fullscreen : true,
+				animation : 'slide',
+				items : [topPanel],
+				dockedItems : dockedItems
+			});
+
+			
+		}
+	});
+	</script>
+	
+</body>
+</html>
